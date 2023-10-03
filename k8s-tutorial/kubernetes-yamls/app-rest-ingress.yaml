@@ -1,0 +1,26 @@
+# Yes, this version is correct
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: rest-ingress
+  namespace: app-layer
+
+  # Annotations are how we can pass specific configuration to
+  # components. In this case Nginx's controller allows passing
+  # specific behavior properties to Nginx via annotations. 
+  #  
+  # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/
+  annotations:
+    # In some scenarios the exposed URL in the backend service differs from the 
+    # specified path in the Ingress rule. Without a rewrite any request will 
+    # return 404. We are asking Nginx to rewrite this to the path the service expects.
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+    - host: draftkingsk8s.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: app-rest
+              servicePort: 5000

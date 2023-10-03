@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-rest
+  namespace: app-layer
+  labels:
+    app: app-rest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-rest
+  template:
+    metadata:
+      labels:
+        app: app-rest
+    spec:
+      containers:
+        - name: app-rest
+          image: samplerest:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MYSQL_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: db-username
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: db-password
+            - name: MYSQL_URL
+              value: db-service

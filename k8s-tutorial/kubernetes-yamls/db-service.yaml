@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-service
+  namespace: data-layer
+spec:
+  selector:
+    app: db-service
+  ports:
+   - port: 3306
+  # This creates a "headless" service where we don't need
+  # load balancing, since we're only going to have 1
+  # replica
+  # https://kubernetes.io/docs/concepts/services-networking/service/#headless-services
+  clusterIP: None

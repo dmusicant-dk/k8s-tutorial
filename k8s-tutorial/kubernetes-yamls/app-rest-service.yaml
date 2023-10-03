@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-rest
+  namespace: app-layer
+  labels:
+    app: app-rest
+# This specification will create a Service which targets 
+# the TCP port 5000 on any Pod with the "app: app-rest" label,
+# and expose it on the abstracted Service port
+spec:
+  selector:
+    app: app-rest
+  # This is the default, so we didn't need to specify
+  # it, but do so for clarity
+  type: ClusterIP
+  ports:
+   - protocol: TCP
+     # The port exposed by this service
+     port: 5000
+     # The port to target on the pod this service is abstracting.
+     # It can be ommitted and then the "port" above will be used
+     targetPort: 5000
